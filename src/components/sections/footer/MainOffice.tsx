@@ -2,11 +2,13 @@ import CallUsButton from "@/components/common/CallUsButton";
 
 export default function MainOffice() {
     return (
-        <div className="mb-4 flex flex-col items-start justify-center gap-4">
-            <CallUsButton />
+        <div className="font-mallory mb-4 flex flex-col items-start justify-center gap-4">
+            <div>
+                <CallUsButton text="9949489384" phoneNumber="+91 9949489384" />
+            </div>
             <a
                 href="mailto:ovkay.com@gmail.com"
-                className="relative text-[14px] font-semibold uppercase
+                className="relative text-[14px] text-white font-semibold uppercase
         before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-full
         before:bg-current before:transition-all before:duration-300 hover:before:w-0"
             >
@@ -38,7 +40,7 @@ export default function MainOffice() {
             {/* Working Hours Section */}
             <div className="flex items-start gap-x-2">
                 <svg
-                    className="w-6 h-6 text-gray-400 flex-shrink-0 mt-2"
+                    className="w-6 h-6 text-gray-400 flex-shrink-0 mb-2"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -55,8 +57,7 @@ export default function MainOffice() {
                     />
                 </svg>
                 <p className="text-sm text-gray-400">
-                    Mon–Fri: 8am – 6pm <br />
-                    Sat–Sun: 8am – 5pm
+                    Mon–Sat: 9am – 6pm <br />
                 </p>
             </div>
         </div>

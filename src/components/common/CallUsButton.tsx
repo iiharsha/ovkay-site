@@ -1,6 +1,16 @@
-export default function CallUsButton() {
+export default function CallUsButton({
+    phoneNumber = "+91 9949489384",
+    text = "Call Us Now",
+    textSize = "text-[16px]",
+    className = "",
+}: {
+    phoneNumber?: string;
+    text?: string;
+    textSize?: string;
+    className?: string;
+}) {
     return (
-        <button className="bg-white text-accent hover:bg-accent hover:text-white font-semibold transition-colors duration-300 w-[160px] h-[40px] text-black rounded-full flex items-center justify-between p-2">
+        <button className={` ${className} bg-white text-accent hover:bg-accent hover:text-white font-black transition-colors duration-300 w-[160px] h-[40px] text-black rounded-full flex items-center justify-center gap-2 p-2`}>
             <svg
                 width="20"
                 height="20"
@@ -8,7 +18,7 @@ export default function CallUsButton() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 stroke="currentColor"
-                strokeWidth="6"
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             >
@@ -16,9 +26,10 @@ export default function CallUsButton() {
                 <path d="M40 8c6 2 10 6 12 12" />
                 <path d="M44 4c8 2 14 8 16 16" />
             </svg>
-            <a href="tel:+91 9949489384" className="text-[16px]">
-                9949489384
+            <a href={`tel:${phoneNumber}`} className={`${textSize} text-center`}>
+                {text}
             </a>
         </button>
-    )
+    );
 }
+

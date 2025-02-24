@@ -5,10 +5,11 @@ import CopyRight from "./CopyRights";
 import Company from "./Company";
 import Resources from "./Resources";
 import MainOffice from "./MainOffice";
+import { mallory } from "@/assets/fonts";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0c0a0a] py-12 px-4 md:px-8">
+        <footer className="font-mallory bg-secondary py-12 px-4 md:px-8">
             <div className="mx-auto max-w-7xl">
                 <div className="mb-8 flex justify-center">
                     <Link href="/" className="inline-block">
@@ -18,19 +19,19 @@ export default function Footer() {
                 {/*nav section*/}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8 text-center md:text-left">
                     <div>
-                        <h3 className="text-[18px] font-bold text-gray-500 mb-4">Company</h3>
+                        <h3 className="uppercase font-mallory text-[16px] font-bold text-gray-500 mb-4">Company</h3>
                         <Company />
                     </div>
                     <div>
-                        <h3 className="text-[18px] font-bold text-gray-500 mb-4">Company</h3>
+                        <h3 className="uppercase font-mallory text-[16px] font-bold text-gray-500 mb-4">Resources</h3>
                         <Resources />
                     </div>
                     {/*social media section*/}
                     <div>
                         <div className="flex-col items-center justify-center">
-                            <h3 className="text-[18px] font-bold text-gray-500 mb-[4px]">Main Office</h3>
+                            <h3 className="uppercase text-[16px] font-bold text-gray-500 mb-[6px]">Main Office</h3>
                             <MainOffice />
-                            <h3 className="text-[18px] font-bold text-gray-500 mb-[4px]">Follow Us</h3>
+                            <h3 className="uppercase text-[16px] font-bold text-gray-500 mb-[4px]">Follow Us</h3>
                             <SocialMedia />
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { mallory } from "@/assets/fonts";
 import { Dialog, Transition } from "@headlessui/react"
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -39,8 +40,8 @@ export default function MobileMenu({ items }: MenuProps) {
                     </svg>
                 ) : (
                     // Menu Icon (Hamburger)
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="size-8">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="white" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 17h16" />
                     </svg>
                 )}
             </button>
@@ -80,13 +81,13 @@ export default function MobileMenu({ items }: MenuProps) {
                                 <ul className="flex w-full flex-col">
                                     {items.map((item) => (
                                         <li
-                                            className="py-2 text-xl font-semibold text-white transition-colors"
+                                            className="py-2 text-xl font-semibold text-black transition-colors"
                                             key={item.path}
                                         >
                                             <Link
                                                 onClick={closeMobileMenu}
                                                 href={item.path}
-                                                className="hover-line"
+                                                className={`${mallory.variable} font-mallory font-black`}
                                             >
                                                 {item.title}
                                             </Link>

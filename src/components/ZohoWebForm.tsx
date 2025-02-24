@@ -1,47 +1,221 @@
-// components/ZohoWebForm.tsx
-'use client';
+"use client"
+import { useState, type FormEvent } from "react"
 
-import { useEffect } from 'react';
+export default function ZohoWebForm() {
+    const [formData, setFormData] = useState<LeadFormData>({
+        Last_Name: "",
+        Lead_Status: "From Website",
+        From: "",
+        To: "",
+        Bike_type: "",
+        Lead_Source: "Meta Ads",
+        Email: "",
+        Mobile: "",
+        Expected_Shipment_Date: "",
+    })
 
-const ZohoWebForm: React.FC = () => {
-    useEffect(() => {
-        // Define the window event listener function
-        const handleMessage = (evt: MessageEvent) => {
-            if (evt.origin === 'https://crm.zoho.com' || evt.origin === 'https://crm.zohopublic.com') {
-                const loc_obj = JSON.stringify({
-                    origin: window.location.origin,
-                    pathname: window.location.pathname,
-                    search: window.location.search,
-                    hash: window.location.hash,
-                });
-                // Use WindowPostMessageOptions with targetOrigin
-                evt.source?.postMessage(
-                    `prnt_wnd_pg_lc_rc_frm_prwindow_${loc_obj}`,
-                    { targetOrigin: evt.origin }
-                );
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState(false)
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
+    const bikeTypes = ["61- 250CC", "250+CC", "EV Bike", "Premium", "Non Working Bike"] // Add more bike types as needed
+    const hearingSources = ["Google Search", "Instagram", "Facebook", "Referral", "Public Boards"] // Add more hearing sources as needed
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+        setError(null)
+        setSuccess(false)
+
+        try {
+            const response = await fetch("/api/zoho/leads", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+
+            let responseData
+            try {
+                const textData = await response.text()
+                responseData = textData ? JSON.parse(textData) : null
+            } catch (parseError) {
+                console.error("Error parsing response:", parseError)
+                throw new Error("Invalid response from server")
             }
-        };
 
-        // Add event listener
-        window.addEventListener('message', handleMessage, false);
+            if (!response.ok) {
+                throw new Error(responseData?.error || "Failed to create lead")
+            }
 
-        // Cleanup event listener on component unmount
-        return () => {
-            window.removeEventListener('message', handleMessage, false);
-        };
-    }, []);
+            setSuccess(true)
+            setFormData({
+                Last_Name: "",
+                Lead_Status: "Website",
+                From: "",
+                To: "",
+                Bike_type: "",
+                Lead_Source: "",
+                Email: "",
+                Mobile: "",
+                Expected_Shipment_Date: "",
+            })
+        } catch (error) {
+            console.error("Submission error:", error)
+            setError(error instanceof Error ? error.message : "An unknown error occurred")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
 
     return (
-        <div className="max-w-[610px] mx-auto">
-            <iframe
-                width="500"
-                height="590"
-                src="https://crm.zoho.com/crm/WebFormServeServlet?rid=5a13246c4cfe1c6e75b9703d2815cc5ddfe148a8141d606651b01a84b417b265f4d20c2facadb4f5d51b15bb76dbcb4cgid6c4668a00c05f23fe60be7acb8c3d3dd5b049609fff1c16c54f05062673087c2"
-                className="border-0 flex items-center justify-center mx-auto"
-                title="Zoho CRM Web Form"
-            />
-        </div>
-    );
-};
+        <div className="mx-auto mt-10 p-6 bg-[#EFEEF1] rounded-lg font-mallory">
+            {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-xl border border-red-300">{error}</div>}
 
-export default ZohoWebForm;
+            {success && (
+                <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-xl border border-green-300">
+                    Thank You for you response Our Team will Contact You Right Away!
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                    <div>
+                        <label className="block mb-2">Name</label>
+                        <input
+                            type="text"
+                            value={formData.Last_Name}
+                            onChange={(e) => setFormData({ ...formData, Last_Name: e.target.value })}
+                            className="w-full p-2 border rounded-xl"
+                            required
+                            placeholder="Enter full name"
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2">Email</label>
+                        <input
+                            type="email"
+                            value={formData.Email}
+                            onChange={(e) => setFormData({ ...formData, Email: e.target.value })}
+                            className="w-full p-2 border rounded-xl"
+                            placeholder="Enter email"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                    <div>
+                        <label className="block mb-2">Mobile *</label>
+                        <input
+                            type="text"
+                            value={formData.Mobile}
+                            onChange={(e) => setFormData({ ...formData, Mobile: e.target.value })}
+                            className="w-full p-2 border rounded"
+                            required
+                            pattern="[0-9]{10}"
+                            title="Please enter a valid 10-digit mobile number"
+                            placeholder="Enter Valid Phone Number"
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2">Expected Shipment Date</label>
+                        <input
+                            type="date"
+                            value={formData.Expected_Shipment_Date}
+                            onChange={(e) => setFormData({ ...formData, Expected_Shipment_Date: e.target.value })}
+                            className="w-full p-2 border rounded"
+                            min={new Date().toISOString().split("T")[0]}
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                    <div>
+                        <label className="block mb-2">From Location</label>
+                        <input
+                            type="text"
+                            value={formData.From}
+                            onChange={(e) => setFormData({ ...formData, From: e.target.value })}
+                            className="w-full p-2 border rounded-xl"
+                            required
+                            placeholder="Enter pickup location"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-2">To Location</label>
+                        <input
+                            type="text"
+                            value={formData.To}
+                            onChange={(e) => setFormData({ ...formData, To: e.target.value })}
+                            className="w-full p-2 border rounded-xl"
+                            required
+                            placeholder="Enter drop location"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-span-2">
+                    <label className="block mb-2 text-primary text-[14px] font-medium">Bike Type</label>
+                    <select
+                        value={formData.Bike_type}
+                        onChange={(e) => setFormData({ ...formData, Bike_type: e.target.value })}
+                        className="w-full p-2 border rounded-xl bg-white"
+                        required
+                    >
+                        <option value="">Select Bike Type</option>
+                        {bikeTypes.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col-span-2">
+                    <label className="block mb-2 text-primary text-[14px] font-medium">How did you hear about us?</label>
+                    <select
+                        value={formData.Lead_Source}
+                        onChange={(e) => setFormData({ ...formData, Lead_Source: e.target.value })}
+                        className="w-full p-2 border rounded-xl bg-white"
+                        required
+                    >
+                        <option value="" className="text-[16px]">
+                            Select
+                        </option>
+                        {hearingSources.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`col-span-2 w-full py-2 px-4 rounded-xl text-white font-black uppercase tracking-normal ${isSubmitting ? "bg-[#0e3a6c] cursor-not-allowed" : "bg-[#0e3a6c] hover:bg-[#052952]"
+                        }`}
+                >
+                    {isSubmitting ? (
+                        <div className="w-6 h-6 border-2 border-dark border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    ) : (
+                        "Get A Quote Now"
+                    )}
+                </button>
+            </form>
+
+            <div className="col-span-2">
+                <p className="text-gray-600 text-sm mt-4">
+                    By submitting this quote request, you agree to allow Ovkay Logistics.
+                    <br />
+                    to send you text or SMS messages pertaining to your quote request. Ovkay Logistics. will never text/message
+                    you anything that does not pertain to your move and your phone number will never be shared or added to
+                    marketing campaigns of any kind.
+                </p>
+            </div>
+        </div>
+    )
+}
+
+
