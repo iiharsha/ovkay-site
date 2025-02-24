@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { NavItems } from "./nav-items"
 import { mallory } from "@/assets/fonts";
 
 interface MenuProps {

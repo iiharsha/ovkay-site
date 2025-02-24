@@ -1,6 +1,18 @@
 "use client"
 import { useState, type FormEvent } from "react"
 
+interface LeadFormData {
+    Last_Name: string;
+    Lead_Status: string;
+    From: string;
+    To: string;
+    Bike_type: string;
+    Lead_Source: string;
+    Email: string;
+    Mobile: string;
+    Expected_Shipment_Date: string;
+}
+
 export default function ZohoWebForm() {
     const [formData, setFormData] = useState<LeadFormData>({
         Last_Name: "",
@@ -8,7 +20,7 @@ export default function ZohoWebForm() {
         From: "",
         To: "",
         Bike_type: "",
-        Lead_Source: "Meta Ads",
+        Lead_Source: "",
         Email: "",
         Mobile: "",
         Expected_Shipment_Date: "",
@@ -17,7 +29,6 @@ export default function ZohoWebForm() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
     const bikeTypes = ["61- 250CC", "250+CC", "EV Bike", "Premium", "Non Working Bike"] // Add more bike types as needed
     const hearingSources = ["Google Search", "Instagram", "Facebook", "Referral", "Public Boards"] // Add more hearing sources as needed

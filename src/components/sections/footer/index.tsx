@@ -5,7 +5,6 @@ import CopyRight from "./CopyRights";
 import Company from "./Company";
 import Resources from "./Resources";
 import MainOffice from "./MainOffice";
-import { mallory } from "@/assets/fonts";
 
 export default function Footer() {
     return (
