@@ -19,7 +19,7 @@ export default function GetFreeQuote({
         <Dialog>
             <DialogTrigger asChild>
                 <button
-                    className={`${className} font-black bg-[#052952] shadow-xl text-white hover:text-secondary hover:bg-white transition-colors duration-300 w-[170px] h-[40px] rounded-full flex items-center justify-center gap-2 text-nowrap p-2 tracking-[0.01em] font-mallory`}
+                    className={`${className} font-black bg-[#052952] shadow-xl text-white hover:text-secondary hover:bg-white transition-colors duration-300 rounded-full flex items-center justify-center gap-2 text-nowrap p-2 tracking-[0.1em] font-mallory`}
                 >
                     {text}
                 </button>

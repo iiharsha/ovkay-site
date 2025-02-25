@@ -2,14 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-.iframe-container {
-  width: 100%;
-  height: 100%;
-  max-width: 610px;
-  background: #efeef1;
-  max-height: 610px;
+.section-header {
+  font-size: 32px;
+  font-family: var(--font-mallory);
+  font-weight: 900; /* Equivalent to font-extrabold */
+  text-transform: uppercase;
+  color: var(--color-secondary); /* Assuming text-secondary is a CSS variable */
 }
 
+/* Responsive font sizes */
+@media (min-width: 575px) { /* sm */
+  .section-header {
+    font-size: 40px;
+  }
+}
+@media (min-width: 992px) { /* lg */
+  .section-header {
+    font-size: 48px;
+  }
+}
 
 
 @layer base {

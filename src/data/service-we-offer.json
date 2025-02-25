@@ -1,0 +1,21 @@
+[
+  {
+    "path": "/svg/truck-icon-bike.svg",
+    "altText": "Intercity Bike Transport Icon",
+    "heading": "Intercity Bike Transport",
+    "description": "Experience seamless bike shipping across cities with OVKAY. We ensure your motorcycle reaches its destination safely and on time.With our secure handling, real-time tracking, and expert logistics, you can trust us to transport your bike with care and precision. Whether you're relocating, selling, or planning a long trip, we make bike shipping hassle-free and reliable."
+  },
+  {
+    "path": "/svg/truck-icon-bike.svg",
+    "altText": "Same City Bike Icon",
+    "heading": "Same City Bike Transport",
+    "description": "Need to move your bike within the city? OVKAY offers quick and reliable bike shipping services for intra-city relocations."
+  },
+  {
+    "path": "/svg/truck-icon-bike.svg",
+    "altText": "In-City Bike Maintaince Icon",
+    "heading": "In-City Bike Maintaince Service",
+    "description": "Convenient bike pickup and delivery from your home or office, saving you time by eliminating trips to the service center."
+  }
+]
+

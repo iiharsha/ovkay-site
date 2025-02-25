@@ -1,0 +1,39 @@
+[
+  {
+    "path": "/svg/price-guarantee.svg",
+    "altText": "Price Guarantee Icon",
+    "heading": "Price Guarantee For You",
+    "description": "Our upfront pricing model guarantees no hidden fees and no surprise charges on moving day. Once we quote a price based on the size and distance of the move, we stick to it – allowing you to stick to your budget."
+  },
+  {
+    "path": "/svg/move-on-time.svg",
+    "altText": "Move On Time Icon",
+    "heading": "Move On Time",
+    "description": "With our expertise in bike logistics, we ensure timely pickup and delivery of your bike, whether within the city or across states. Our team follows a precise schedule to guarantee your bike reaches its destination on time and in perfect condition."
+  },
+  {
+    "path": "/svg/read-our-reviews.svg",
+    "altText": "Read Our Reviews Icon",
+    "heading": "Read Our Reviews",
+    "description": "Take everyone’s word for it! Read our reviews on Google—you’ll like what you see."
+  },
+  {
+    "path": "/svg/pro-movers.svg",
+    "altText": "Professional Movers Icon",
+    "heading": "Professional Bike Handlers",
+    "description": "Our trained bike transport specialists handle your vehicle with care and expertise. Using advanced loading techniques and protective measures, we ensure your bike is transported safely, without any scratches or damage."
+  },
+  {
+    "path": "/svg/customer-service.svg",
+    "altText": "Customer Service Icon",
+    "heading": "Premium Customer Service",
+    "description": "Experience prime customer service without paying the premium price. We’re there for you from start to finish, answering questions and alleviating concerns. Our team applies our experience and expertise to your situation, creating the best outcome for your move."
+  },
+  {
+    "path": "/svg/secure-packing.svg",
+    "altText": "Secure Packing Icon",
+    "heading": "Secure Bike Packing",
+    "description": "We use high-quality protective materials to pack your bike securely, preventing any damage during transit. From foam padding to custom tie-downs, we take every precaution to ensure your bike is delivered in the same condition as when it was picked up."
+  }
+]
+

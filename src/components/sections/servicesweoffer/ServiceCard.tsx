@@ -1,21 +1,21 @@
 import Image from "next/image";
 
-interface WhyCardProps {
+interface ServicesCardProps {
     path: string;
     altText: string;
     heading: string;
     description: string;
 }
 
-export default function WhyCard({
+export default function ServiceCard({
     path = "",
     altText = "",
     heading = "",
     description = "",
-}: WhyCardProps) {
+}: ServicesCardProps) {
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden font-mallory">
-            <div className="px-2 relative h-[80px]">
+        <div className="bg-white rounded-lg drop-shadow-xl overflow-hidden font-mallory h-[475px]">
+            <div className="flex items-center justify-center px-2 relative h-[180px] bg-[#EFEEF1] m-4 rounded-lg">
                 <Image
                     src={path}
                     alt={altText}
