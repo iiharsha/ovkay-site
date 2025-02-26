@@ -1,4 +1,3 @@
-import Image from "next/image"
 import services from "@/data/service-we-offer.json"
 import ServiceCard from "./ServiceCard"
 
