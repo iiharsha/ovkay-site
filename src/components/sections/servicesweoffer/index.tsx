@@ -1,4 +1,4 @@
-
+import Image from "next/image"
 import services from "@/data/service-we-offer.json"
 import ServiceCard from "./ServiceCard"
 
@@ -10,6 +10,7 @@ export default function ServicesWeOffer() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:mt-[40px] lg:mt-[48px]">
                 {services.map((item, index) => (
                     <ServiceCard
+                        estimateText={item.estimateText}
                         key={index}
                         path={item.path}
                         altText={item.altText}

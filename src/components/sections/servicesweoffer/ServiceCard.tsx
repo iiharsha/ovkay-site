@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 interface ServicesCardProps {
+    estimateText: string;
     path: string;
     altText: string;
     heading: string;
@@ -8,6 +9,7 @@ interface ServicesCardProps {
 }
 
 export default function ServiceCard({
+    estimateText = "",
     path = "",
     altText = "",
     heading = "",
@@ -15,18 +17,34 @@ export default function ServiceCard({
 }: ServicesCardProps) {
     return (
         <div className="bg-white rounded-lg drop-shadow-xl overflow-hidden font-mallory h-[475px]">
-            <div className="flex items-center justify-center px-2 relative h-[180px] bg-[#EFEEF1] m-4 rounded-lg">
+            {/* Image Container */}
+            <div className="relative flex items-center justify-center h-[180px] bg-[#EFEEF1] m-4 rounded-lg overflow-hidden">
+                {/* Overlay effect */}
+                <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+
+                <span className="absolute top-2 left-2 bg-[#166bac]/80 text-white text-sm px-2 py-1 rounded-md z-10">
+                    {estimateText}
+                </span>
+
                 <Image
                     src={path}
                     alt={altText}
-                    width={80}
-                    height={80}
+                    width={1024}
+                    height={683}
+                    className="w-full h-full object-cover"
                 />
             </div>
+
+            {/* Text Content */}
             <div className="p-4 text-secondary">
-                <h3 className="font-black uppercase text-[24px] text-wrap leading-none mb-[12px]">{heading}</h3>
-                <p className="font-medium text-secondary/85 tracking-tighter text-pretty">{description}</p>
+                <h3 className="font-bold uppercase text-[24px] text-wrap leading-none mb-[12px]">
+                    {heading}
+                </h3>
+                <p className="overflow-y-auto max-h-[150px] break-words font-medium text-secondary/85 tracking-tighter text-pretty">
+                    {description}
+                </p>
             </div>
         </div>
-    )
+    );
 }
+

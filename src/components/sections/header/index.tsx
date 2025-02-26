@@ -6,7 +6,7 @@ import MobileMenu from "./mobile-menu"
 import CallUsButton from "@/components/common/CallUsButton"
 import GetFreeQuote from "@/components/common/GetFreeQuote"
 
-const headerClass = `flex items-center justify-between sticky bg-[#166bac] top-0 z-50 transition-all
+const headerClass = `flex items-center justify-between sticky bg-[#0e3a6c] top-0 z-50 transition-all
 duration-300 ease-in-out px-4 py-2 md:h-[90px] h-[60px] md:py-0`
 
 const Header = () => {

@@ -24,7 +24,7 @@ export default function WhyCard({
                 />
             </div>
             <div className="p-4 text-secondary">
-                <h3 className="font-black uppercase text-[24px] text-wrap leading-none mb-[12px]">{heading}</h3>
+                <h3 className="font-bold uppercase text-[24px] text-wrap leading-none mb-[12px]">{heading}</h3>
                 <p className="font-medium text-secondary/85 tracking-tighter text-pretty">{description}</p>
             </div>
         </div>
