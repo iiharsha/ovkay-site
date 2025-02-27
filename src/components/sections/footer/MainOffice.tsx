@@ -33,9 +33,6 @@ export default function MainOffice() {
                     3rd-Floor, T-Hub 2.0, Madhapur <br /> Hyderabad, Telangana 500081
                 </p>
             </div>
-            <div>
-                <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
-            </div>
 
             {/* Working Hours Section */}
             <div className="flex items-start gap-x-2">
@@ -59,6 +56,9 @@ export default function MainOffice() {
                 <p className="text-sm text-gray-400">
                     Mon–Sat: 9am – 6pm <br />
                 </p>
+                <div>
+                    <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
+                </div>
             </div>
         </div>
     );
