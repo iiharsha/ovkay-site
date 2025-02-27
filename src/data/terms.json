@@ -1,0 +1,106 @@
+{
+  "general": {
+    "title": "General",
+    "sections": [
+      {
+        "title": "Acceptance of Terms",
+        "content": "By accessing or using the services provided by OVKAY, a product of Goederen Private Limited, the User acknowledges having read, understood, and agreed to these Terms."
+      },
+      {
+        "title": "Modification of Terms",
+        "content": "The Company reserves the right to modify, amend, or update these Terms at any time without prior notice. Users are responsible for reviewing these Terms periodically to stay informed of any changes."
+      }
+    ]
+  },
+  "use_of_services": {
+    "title": "Use of Services",
+    "sections": [
+      {
+        "title": "Eligibility",
+        "content": "The User must be of legal age and capacity to enter into a binding contract to use the services provided by the Company."
+      },
+      {
+        "title": "User Account",
+        "content": "Users may be required to create an account to access certain services. The User is responsible for maintaining the confidentiality of their account information and is liable for all activities conducted through their account."
+      },
+      {
+        "title": "User Conduct",
+        "content": "The User agrees to use the services in accordance with all applicable laws and regulations. Any use of the services for unlawful purposes or in a manner that violates these Terms is strictly prohibited."
+      }
+    ]
+  },
+  "service_specific_terms": {
+    "title": "Service Specific Terms",
+    "sections": [
+      {
+        "title": "Door To Door Services",
+        "content": [
+          "The Company is not liable for damages occurring during transportation, except as expressly provided in these Terms.",
+          "If damage occurs, the User is encouraged to contact OVKAY for support in the refund process for repair costs.",
+          "Minor scratches are considered the owner's responsibility, and if the User chooses to repair the damage, reimbursement is possible upon submission of the repair bill (up to Rs. 5000)."
+        ]
+      },
+      {
+        "title": "Door To Hub Services",
+        "content": [
+          "Storage charges may apply if the User fails to collect their bike within the specified timeframe.",
+          "The User is responsible for any release amounts during the unloading and unpacking process.",
+          "The Company is not responsible for providing petrol, and the User must carry sufficient petrol to the hub."
+        ]
+      }
+    ]
+  },
+  "intellectual_property": {
+    "title": "Intellectual Property",
+    "sections": [
+      {
+        "title": "Ownership",
+        "content": "All intellectual property rights related to the services, including but not limited to logos, trademarks, and content, are owned or licensed by the Company."
+      },
+      {
+        "title": "Use Restrictions",
+        "content": "The User may not sell, modify, reproduce, display, distribute, or otherwise use the intellectual property of the Company without explicit written permission."
+      }
+    ]
+  },
+  "insurance": {
+    "title": "Insurance",
+    "sections": [
+      {
+        "title": "Transit Insurance Coverage",
+        "content": "Ovkay provides transit insurance covering damages, theft, fire accidents, etc. Scratches are excluded from coverage."
+      },
+      {
+        "title": "Customer's Two-Wheeler Insurance",
+        "content": "It is mandatory for customers to have their own two-wheeler insurance. Damages exceeding \u20b95000 during transit must be claimed by the customer through their two-wheeler insurance."
+      }
+    ]
+  },
+  "refunds_and_cancellations": {
+    "title": "Refunds and Cancellations Policy",
+    "sections": [
+      {
+        "title": "Cancellation Before Pickup",
+        "content": "If a customer cancels their order before our delivery driver arrives at their location, a refund of 90% of the amount paid will be issued."
+      },
+      {
+        "title": "Cancellation Before Pickup Person Arrives",
+        "content": "In the event of cancellation before the pickup person reaches the customer's location, a full refund will be provided."
+      }
+    ]
+  },
+  "shipping_and_delivery": {
+    "title": "Shipping and Delivery Timelines",
+    "sections": [
+      {
+        "title": "Ovkay Express",
+        "content": "Bikes will be shipped within 24 to 72 hours."
+      },
+      {
+        "title": "Ovkay Economy",
+        "content": "Bikes will be shipped within 3 to 7 days."
+      }
+    ]
+  }
+}
+

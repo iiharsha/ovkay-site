@@ -1,5 +1,6 @@
 "use client"
 import { useState, type FormEvent } from "react"
+import Logo from "./layout/LogoHeader";
 
 interface LeadFormData {
     Last_Name: string;
@@ -90,7 +91,9 @@ export default function ZohoWebForm() {
                     Thank You for you response Our Team will Contact You Right Away!
                 </div>
             )}
-
+            <div className="flex items-center justify-center m-4">
+                <Logo size="sm" />
+            </div>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
                     <div>
@@ -123,7 +126,7 @@ export default function ZohoWebForm() {
                             type="text"
                             value={formData.Mobile}
                             onChange={(e) => setFormData({ ...formData, Mobile: e.target.value })}
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2 border rounded-xl"
                             required
                             pattern="[0-9]{10}"
                             title="Please enter a valid 10-digit mobile number"
@@ -136,7 +139,7 @@ export default function ZohoWebForm() {
                             type="date"
                             value={formData.Expected_Shipment_Date}
                             onChange={(e) => setFormData({ ...formData, Expected_Shipment_Date: e.target.value })}
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2 border rounded-xl"
                             min={new Date().toISOString().split("T")[0]}
                         />
                     </div>

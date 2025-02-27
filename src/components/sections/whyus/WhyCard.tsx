@@ -15,7 +15,7 @@ export default function WhyCard({
 }: WhyCardProps) {
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden font-mallory">
-            <div className="px-2 relative h-[80px]">
+            <div className="bg-white dark:text-white px-2 relative h-[80px]">
                 <Image
                     src={path}
                     alt={altText}

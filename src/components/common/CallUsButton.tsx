@@ -10,7 +10,7 @@ export default function CallUsButton({
     className?: string;
 }) {
     return (
-        <button className={` ${className} bg-white text-accent hover:bg-accent hover:text-white font-black transition-colors duration-300 text-black rounded-full flex items-center justify-center gap-2 p-2`}>
+        <button className={` ${className} bg-white hover:bg-accent hover:text-white font-black transition-colors duration-300 text-black rounded-full flex items-center justify-center gap-2 p-2`}>
             <svg
                 width="20"
                 height="20"

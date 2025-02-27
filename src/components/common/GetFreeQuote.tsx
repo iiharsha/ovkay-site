@@ -24,10 +24,10 @@ export default function GetFreeQuote({
                     {text}
                 </button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col items-start justify-start min-w-[50vw] bg-[#efeef1] overflow-x-auto overflow-y-auto max-h-[90vh] p-6 border-none shadow-lg rounded-lg">
-                <DialogHeader className="text-center mb-4 w-full">
+            <DialogContent className="flex flex-col items-start justify-start min-w-[50vw] bg-[#efeef1] overflow-x-auto overflow-y-auto max-h-[90vh] p-4 border-none shadow-lg rounded-lg">
+                <DialogHeader className="text-center mb-2 w-full">
                     <DialogTitle className="text-[28px] sm:text-[40px] font-black uppercase text-black font-mallory">Get a Free Quote</DialogTitle>
-                    <DialogDescription className="text-lg text-gray-600 mt-2 font-mallory">
+                    <DialogDescription className="text-lg text-gray-600 font-mallory">
                         Fill out the form below and we will get back to you with a customized quote.
                     </DialogDescription>
                 </DialogHeader>

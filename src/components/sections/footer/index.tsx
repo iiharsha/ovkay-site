@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="mx-auto max-w-7xl">
                 <div className="mb-8 flex justify-center">
                     <Link href="/" className="inline-block">
-                        <Logo size="sm" />
+                        <Logo size="sm" variant="white" />
                     </Link>
                 </div>
                 {/*nav section*/}

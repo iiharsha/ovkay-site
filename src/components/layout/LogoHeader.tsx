@@ -13,7 +13,7 @@ const Logo = ({
     variant?: 'default' | 'white';
 }) => {
     const logosource =
-        variant === 'white' ? '/images/logo.png' : '/images/logo.png';
+        variant === 'white' ? '/images/logo-white.png' : '/images/logo-blue.png';
     return (
         <Image
             src={logosource}

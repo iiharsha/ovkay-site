@@ -1,11 +1,8 @@
-import CallUsButton from "@/components/common/CallUsButton";
+import ContactUs from "@/components/common/ContactUs";
 
 export default function MainOffice() {
     return (
         <div className="font-mallory mb-4 flex flex-col items-start justify-center gap-4">
-            <div>
-                <CallUsButton text="9949489384" phoneNumber="+91 9949489384" />
-            </div>
             <a
                 href="mailto:ovkay.com@gmail.com"
                 className="relative text-[14px] text-white font-semibold uppercase
@@ -35,6 +32,9 @@ export default function MainOffice() {
                 <p className="text-sm text-gray-400">
                     3rd-Floor, T-Hub 2.0, Madhapur <br /> Hyderabad, Telangana 500081
                 </p>
+            </div>
+            <div>
+                <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
             </div>
 
             {/* Working Hours Section */}

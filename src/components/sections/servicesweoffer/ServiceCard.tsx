@@ -20,7 +20,7 @@ export default function ServiceCard({
             {/* Image Container */}
             <div className="relative flex items-center justify-center h-[180px] bg-[#EFEEF1] m-4 rounded-lg overflow-hidden">
                 {/* Overlay effect */}
-                <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+                <div className="absolute inset-0 bg-secondary dark:bg-opacity-30 bg-opacity-30"></div>
 
                 <span className="absolute top-2 left-2 bg-[#166bac]/80 text-white text-sm px-2 py-1 rounded-md z-10">
                     {estimateText}

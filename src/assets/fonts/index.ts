@@ -18,12 +18,12 @@ export const mallory = localFont({
       style: "normal",
     },
     {
-      path: "./Mallory-Ultra.woff2",
+      path: "./Mallory-Black.woff2",
       weight: "800",
       style: "normal",
     },
     {
-      path: "./Mallory-Black.woff2",
+      path: "./Mallory-Ultra.woff2",
       weight: "900",
       style: "normal",
     },
