@@ -3,7 +3,7 @@ import { Truck, MapPin, PenToolIcon as Tool, Shield, Award, Home } from "lucide-
 
 export default function AboutOurCompany() {
     return (
-        <div className="bg-gradient-to-b from-white to-gray-50 py-16 font-mallory">
+        <main className="bg-gradient-to-b from-white to-gray-50 py-16 font-mallory">
             {/* Hero Section */}
             <div className="container mx-auto px-4 max-w-6xl">
                 <div className="text-center mb-16">
@@ -113,6 +113,6 @@ India.`}
                     <p className="text-xl font-bold">Choose OVKAY for Bike Shipping and Servicing you can count on.</p>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
