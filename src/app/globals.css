@@ -1,6 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind utilities {
+  /* Mobile: Bottom narrows */
+  .clip-path-mobile {
+    clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+  }
+
+  /* Desktop: Right side shorter */
+  .clip-path-desktop {
+    clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 0% 100%);
+  }
+}
 
 .section-header {
   font-size: 32px;
