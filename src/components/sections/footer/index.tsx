@@ -26,7 +26,7 @@ export default function Footer() {
                         <Resources />
                     </div>
                     {/*social media section*/}
-                    <div>
+                    <div className="flex items-center justify-center">
                         <div className="flex-col items-center justify-center">
                             <h3 className="uppercase text-[16px] font-bold text-gray-500 mb-[6px]">Main Office</h3>
                             <MainOffice />
@@ -40,17 +40,17 @@ export default function Footer() {
             <div className="mt-12 pt-8 border-t border-gray-400">
                 <div className="flex md:space-x-4 gap-2 justify-center">
                     <Link
-                        href="/termsofservice"
+                        href="/terms"
                         className="underline text-gray-400 hover:text-gray-200 transition-colors mb-2 md:mb-0"
                     >
                         {`Terms`}
                     </Link>
                     <div className="mx-4 mt-3 w-1 h-1 bg-gray-400 rounded-full"></div>
                     <Link
-                        href="/privacypolicy"
+                        href="/privacy"
                         className="underline text-gray-400 hover:text-gray-200 transition-colors mb-2 md:mb-0"
                     >
-                        {`Privacy Policy`}
+                        {`Privacy`}
                     </Link>
                 </div>
                 <div className="mt-12 flex flex-col items-center justify-between gap-6 pt-8 border-t border-gray-400 md:flex-row">

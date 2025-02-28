@@ -29,12 +29,14 @@ interface AnimatedContactDropdownProps {
     phoneNumber: string;
     whatsappNumber: string;
     intervalTime?: number;
+    className?: string;
 }
 
 const ContactUs: React.FC<AnimatedContactDropdownProps> = ({
     phoneNumber,
     whatsappNumber,
-    intervalTime = 3000
+    intervalTime = 3000,
+    className = ""
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [showingFirst, setShowingFirst] = useState<boolean>(true)
@@ -88,7 +90,7 @@ const ContactUs: React.FC<AnimatedContactDropdownProps> = ({
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-                <Button className="relative h-[40px] hidden md:flex w-[200px] overflow-hidden bg-white hover:bg-accent rounded-full">
+                <Button className={`${className} relative h-[40px] sm:flex w-[127px] sm:w-[200px] overflow-hidden bg-white hover:bg-accent rounded-full`}>
                     <AnimatePresence mode="wait">
                         {showingFirst ? (
                             <motion.div
@@ -100,7 +102,8 @@ const ContactUs: React.FC<AnimatedContactDropdownProps> = ({
                                 className="flex items-center space-x-2"
                             >
                                 <PhoneCall className="h-4 w-4 text-black" />
-                                <span className="text-[16px] text-secondary font-mallory font-black">{formatIndianPhoneNumber(phoneNumber)}</span>
+                                <span className="hidden sm:flex text-[16px] text-secondary font-mallory font-black">{formatIndianPhoneNumber(phoneNumber)}</span>
+                                <span className="flex sm:hidden text-[16px] text-secondary font-mallory font-black">Call</span>
                             </motion.div>
                         ) : (
                             <motion.div
@@ -112,7 +115,8 @@ const ContactUs: React.FC<AnimatedContactDropdownProps> = ({
                                 className="flex items-center space-x-2"
                             >
                                 <WhatsAppIcon className="h-4 w-4" />
-                                <span className="text-[16px] text-secondary font-mallory font-black">{formatIndianPhoneNumber(whatsappNumber)}</span>
+                                <span className="hidden sm:flex text-[16px] text-secondary font-mallory font-black">{formatIndianPhoneNumber(whatsappNumber)}</span>
+                                <span className="flex sm:hidden text-[16px] text-secondary font-mallory font-black">WhatsApp</span>
                             </motion.div>
                         )}
                     </AnimatePresence>

@@ -3,13 +3,16 @@ import ContactUs from "@/components/common/ContactUs";
 export default function MainOffice() {
     return (
         <div className="font-mallory mb-4 flex flex-col items-start justify-center gap-4">
+            <div className="ml-16 sm:ml-0">
+                <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
+            </div>
             <a
-                href="mailto:ovkay.com@gmail.com"
-                className="relative text-[14px] text-white font-semibold uppercase
+                href="mailto:support@ovkay.com"
+                className="ml-12 sm:ml-0 relative text-[14px] text-white font-semibold uppercase
         before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-full
         before:bg-current before:transition-all before:duration-300 hover:before:w-0"
             >
-                ovkay.com@gmail.com
+                support@ovkay.com
             </a>
 
             {/* Address Section */}
@@ -56,9 +59,6 @@ export default function MainOffice() {
                 <p className="text-sm text-gray-400">
                     Mon–Sat: 9am – 6pm <br />
                 </p>
-            </div>
-            <div>
-                <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
             </div>
         </div>
     );

@@ -29,7 +29,7 @@ export default function TermsOfService() {
           </h2>
           {section.sections.map((sub, index) => (
             <div key={index} className="mb-8">
-              <h3 className="text-2xl sm:text-3xl font-bold uppercase mb-3 tracking-tight">
+              <h3 className="text-xl sm:text-2xl font-bold uppercase mb-3 tracking-tight">
                 {sub.title}
               </h3>
               <p className="text-base sm:text-lg leading-relaxed">
