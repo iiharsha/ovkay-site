@@ -1,5 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Privacy Policy"
+}
 
 const PrivacyPage = () => {
   return (

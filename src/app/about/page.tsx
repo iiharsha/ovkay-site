@@ -1,4 +1,9 @@
 import AboutOurCompany from "@/components/sections/about/AboutOurCompany";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About"
+}
 
 export default function About() {
   return (

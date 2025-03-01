@@ -8,8 +8,14 @@ import { Suspense } from "react";
 import Loading from "@/components/common/Loading";
 
 export const metadata: Metadata = {
-  title: "Bike Transport Services | Fast Bike Shifting | Ovkay",
-  description: "Reliable bike transportation services across India.",
+  title: {
+    default: "Bike Transport & Shipping Services | Ovkay",
+    template: "%s | Reliable Bike Services | Ovkay"
+  },
+  description: "Ship Your Bike Anywhere Across India.",
+  twitter: {
+    card: "summary_large_image"
+  }
 };
 
 export default function RootLayout({
@@ -24,7 +30,9 @@ export default function RootLayout({
       >
         <Suspense fallback={<Loading />} >
           <Header />
-          {children}
+          <main>
+            {children}
+          </main>
           <Footer />
         </Suspense>
       </body>

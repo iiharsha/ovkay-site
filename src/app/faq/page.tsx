@@ -1,6 +1,9 @@
 import FaqSection from "@/components/sections/faq/FaqSection";
+import { Metadata } from "next";
 
-
+export const metadata: Metadata = {
+  title: "FAQs"
+}
 export default function About() {
   return (
     <main>

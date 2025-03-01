@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { Metadata } from 'next';
 
 type Section = {
   title: string;
@@ -12,6 +13,10 @@ type TermsData = {
     sections: Section[];
   };
 };
+
+export const metadata: Metadata = {
+  title: "Terms of Serivce"
+}
 
 export default function TermsOfService() {
   const filePath = path.join(process.cwd(), "src/data", "terms.json");
