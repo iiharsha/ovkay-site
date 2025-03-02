@@ -16,7 +16,7 @@ export default function ServiceCard({
     description = "",
 }: ServicesCardProps) {
     return (
-        <div className="bg-white rounded-lg drop-shadow-xl overflow-hidden font-mallory h-[475px]">
+        <div className="bg-white rounded-lg drop-shadow-xl overflow-hidden font-mallory h-[435px]">
             {/* Image Container */}
             <div className="relative flex items-center justify-center h-[180px] bg-[#EFEEF1] m-4 rounded-lg overflow-hidden">
                 {/* Overlay effect */}

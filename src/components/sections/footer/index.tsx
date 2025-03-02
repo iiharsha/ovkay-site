@@ -37,23 +37,23 @@ export default function Footer() {
                 </div>
             </div>
             {/*Legal Section*/}
-            <div className="mt-12 pt-8 border-t border-gray-400">
+            <div className="mt-12 pt-8 border-t border-primary">
                 <div className="flex md:space-x-4 gap-2 justify-center">
                     <Link
                         href="/terms"
-                        className="underline text-gray-400 hover:text-gray-200 transition-colors mb-2 md:mb-0"
+                        className="underline text-gray-500 hover:text-gray-200 transition-colors mb-2 md:mb-0"
                     >
                         {`Terms`}
                     </Link>
-                    <div className="mx-4 mt-3 w-1 h-1 bg-gray-400 rounded-full"></div>
+                    <div className="mx-4 mt-3 w-1 h-1 bg-gray-500 rounded-full"></div>
                     <Link
                         href="/privacy"
-                        className="underline text-gray-400 hover:text-gray-200 transition-colors mb-2 md:mb-0"
+                        className="underline text-gray-500 hover:text-gray-200 transition-colors mb-2 md:mb-0"
                     >
                         {`Privacy`}
                     </Link>
                 </div>
-                <div className="mt-12 flex flex-col items-center justify-between gap-6 pt-8 border-t border-gray-400 md:flex-row">
+                <div className="mt-12 flex flex-col items-center justify-between gap-6 pt-8 border-t border-primary md:flex-row">
                     <CopyRight />
                 </div>
             </div>

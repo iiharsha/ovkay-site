@@ -1,4 +1,3 @@
-// types/zoho.ts
 // app/api/zoho/leads/route.ts
 import { NextResponse } from "next/server";
 
@@ -23,18 +22,18 @@ async function getAccessToken() {
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
       console.error("Token response error:", errorText);
-      throw new Error("Failed to get access token");
+      throw new Error("Failed Access");
     }
 
     const data = await tokenResponse.json();
     if (!data.access_token) {
-      throw new Error("No access token received");
+      throw new Error("No Access");
     }
 
     return data.access_token;
   } catch (error) {
     console.error("Error getting access token:", error);
-    throw new Error("Failed to get access token");
+    throw new Error("Failed Access");
   }
 }
 
@@ -74,7 +73,7 @@ export async function POST(request: Request) {
       const errorText = await response.text();
       console.error("Zoho API error:", errorText);
       return NextResponse.json(
-        { error: "Failed to create lead in Zoho" },
+        { error: "Failed to Submite Form" },
         { status: response.status },
       );
     }
@@ -83,9 +82,6 @@ export async function POST(request: Request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error creating lead:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Network Error" }, { status: 500 });
   }
 }

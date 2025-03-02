@@ -65,7 +65,7 @@ export default function ZohoWebForm() {
             setSuccess(true)
             setFormData({
                 Last_Name: "",
-                Lead_Status: "Website",
+                Lead_Status: "New",
                 From: "",
                 To: "",
                 Bike_type: "",

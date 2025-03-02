@@ -9,10 +9,10 @@ export default function Home() {
           <h1 className="font-bold text-[50px] text-center">{`OVKAY.COM :)`}</h1>
         </section>
         <section>
-          <WhyUs />
+          <ServicesWeOffer />
         </section>
         <section>
-          <ServicesWeOffer />
+          <WhyUs />
         </section>
       </main>
     </>

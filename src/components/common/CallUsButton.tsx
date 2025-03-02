@@ -1,5 +1,5 @@
 export default function CallUsButton({
-    phoneNumber = "+91 9949489384",
+    phoneNumber = "080 47103622",
     text = "Call Us Now",
     textSize = "text-[16px]",
     className = "",

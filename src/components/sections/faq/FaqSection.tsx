@@ -1,5 +1,6 @@
 import faqData from "@/data/faq-data.json"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import CallUsButton from "@/components/common/CallUsButton";
 
 export default function Faq() {
     return (
@@ -19,12 +20,18 @@ export default function Faq() {
                     <Accordion type="multiple">
                         {faqData.map((faq, index) => (
                             <AccordionItem key={index} value={`faq-${index}`} className="border-b">
-                                <AccordionTrigger className="text-[24px] font-extrabold uppercase">{faq.question}</AccordionTrigger>
+                                <AccordionTrigger className="text-[18px] sm:text-[24px] font-extrabold uppercase">{faq.question}</AccordionTrigger>
                                 <AccordionContent className="text-secondary text-[16px]">{faq.answer}</AccordionContent>
                             </AccordionItem>
                         ))}
                     </Accordion>
                 </div>
+            </div>
+            <div className="w-full h-[50px] mx-auto max-w-9xl flex flex-col items-start justify-center px-4 container pb-12 lg:pb-14">
+                <p className="leading-[25px] text-[20px] text-secondary font-medium px-4">
+                    Have More Questions?
+                </p>
+                <CallUsButton className="lg:mb-[150px] mt-2 w-[250px] border border-black/30 shadow-md" text="080 47103622" />
             </div>
         </main>
     );
