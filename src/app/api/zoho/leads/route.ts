@@ -1,87 +1,58 @@
-// app/api/zoho/leads/route.ts
-import { NextResponse } from "next/server";
+// /app/api/zoho/leads/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { getAccessToken } from "@/lib/zohoAuth"; // Assume you have this utility function
 
-async function getAccessToken() {
+export async function POST(req: NextRequest) {
   try {
-    const tokenResponse = await fetch(
-      "https://accounts.zoho.com/oauth/v2/token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+    const formData = await req.json();
+
+    // Get Zoho access token
+    const token = await getAccessToken();
+
+    // Prepare the lead data with the estimated amount
+    const leadData = {
+      data: [
+        {
+          Last_Name: formData.Last_Name,
+          Email: formData.Email,
+          Mobile: formData.Mobile,
+          Lead_Status: formData.Lead_Status || "From Website",
+          Lead_Source: formData.Lead_Source,
+          From: formData.From,
+          To: formData.To,
+          Bike_type: formData.Bike_type,
+          Expected_Shipment_Date: formData.Expected_Shipment_Date,
+          // Include the estimated amount field (you may need to create this custom field in Zoho)
+          Estimated_Amount: formData.Estimated_Amount,
         },
-        body: new URLSearchParams({
-          refresh_token: process.env.ZOHO_REFRESH_TOKEN!,
-          client_id: process.env.ZOHO_CLIENT_ID!,
-          client_secret: process.env.ZOHO_CLIENT_SECRET!,
-          grant_type: "refresh_token",
-        }),
-      },
-    );
+      ],
+    };
 
-    if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-      console.error("Token response error:", errorText);
-      throw new Error("Failed Access");
-    }
-
-    const data = await tokenResponse.json();
-    if (!data.access_token) {
-      throw new Error("No Access");
-    }
-
-    return data.access_token;
-  } catch (error) {
-    console.error("Error getting access token:", error);
-    throw new Error("Failed Access");
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    if (!request.body) {
-      return NextResponse.json(
-        { error: "No request body provided" },
-        { status: 400 },
-      );
-    }
-
-    const leadData = await request.json();
-
-    // Validate required fields
-    if (!leadData.Last_Name || !leadData.Mobile) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 },
-      );
-    }
-
-    const access_token = await getAccessToken();
-
-    const response = await fetch("https://www.zohoapis.com/crm/v2/Leads", {
+    // Create lead in Zoho CRM
+    const response = await fetch("https://www.zohoapis.com/crm/v3/Leads", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Zoho-oauthtoken ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        data: [leadData],
-      }),
+      body: JSON.stringify(leadData),
     });
 
+    const responseData = await response.json();
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Zoho API error:", errorText);
       return NextResponse.json(
-        { error: "Failed to Submite Form" },
+        { error: responseData.message || "Failed to create lead" },
         { status: response.status },
       );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data: responseData });
   } catch (error) {
-    console.error("Error creating lead:", error);
-    return NextResponse.json({ error: "Network Error" }, { status: 500 });
+    console.error("Lead creation error:", error);
+    return NextResponse.json(
+      { error: "Failed to create lead" },
+      { status: 500 },
+    );
   }
 }

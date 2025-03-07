@@ -26,10 +26,10 @@ const Header = () => {
             </nav>
             <div className="flex items-center space-x-2 mr-2">
                 <div>
-                    <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
+                    <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" className="hidden" />
                 </div>
                 <div>
-                    <GetFreeQuote text="GET FREE QUOTE" className="hidden md:block lg:block h-[40px] w-[220px]" />
+                    <GetFreeQuote text="GET FREE QUOTE" className="md:block lg:block h-[40px] w-[220px]" />
                 </div>
                 <div className="lg:hidden rounded-full border-[1px] border-white/50 h-[38px] flex items-center justify-center">
                     <MobileMenu items={NavItems.items} />

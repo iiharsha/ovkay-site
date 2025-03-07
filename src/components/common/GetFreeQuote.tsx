@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "../ui/dialog"
-import ZohoWebForm from '../ZohoWebForm'
+import ZohoFirstForm from "@/components/ZohoFirstForm"
 
 export default function GetFreeQuote({
     text = "Get Free Quote",
@@ -19,7 +19,7 @@ export default function GetFreeQuote({
         <Dialog>
             <DialogTrigger asChild>
                 <button
-                    className={`${className} font-black bg-[#052952] shadow-xl text-white hover:text-secondary hover:bg-white transition-colors duration-300 rounded-full flex items-center justify-center gap-2 text-nowrap p-2 tracking-[0.1em] font-mallory`}
+                    className={`${className} font-black bg-white shadow-xl text-black hover:text-secondary hover:bg-white transition-colors duration-300 rounded-full flex items-center justify-center gap-2 text-nowrap p-2 tracking-[0.1em] font-mallory`}
                 >
                     {text}
                 </button>
@@ -28,10 +28,10 @@ export default function GetFreeQuote({
                 <DialogHeader className="text-center mb-2 w-full">
                     <DialogTitle className="text-[28px] sm:text-[40px] font-black uppercase text-black font-mallory">Get a Free Quote</DialogTitle>
                     <DialogDescription className="text-lg text-gray-600 font-mallory">
-                        Fill out the form below and we will get back to you with a customized quote.
+                        Fill out the form below to know an estimated price.
                     </DialogDescription>
                 </DialogHeader>
-                <ZohoWebForm />
+                <ZohoFirstForm />
             </DialogContent>
         </Dialog>
     )

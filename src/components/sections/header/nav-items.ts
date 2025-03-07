@@ -9,6 +9,10 @@ export const NavItems = {
       path: "/tracking",
     },
     {
+      title: "Booking",
+      path: "/booking",
+    },
+    {
       title: "About Us",
       path: "/about",
     },

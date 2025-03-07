@@ -1,6 +1,8 @@
 'use client'
 
 import { mallory } from "@/assets/fonts";
+import ContactUs from "@/components/common/ContactUs";
+import GetFreeQuote from "@/components/common/GetFreeQuote";
 import { Dialog, Transition } from "@headlessui/react"
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -87,13 +89,17 @@ export default function MobileMenu({ items }: MenuProps) {
                                             <Link
                                                 onClick={closeMobileMenu}
                                                 href={item.path}
-                                                className={`${mallory.variable} font-mallory font-black`}
+                                                className={`${mallory.variable} font-mallory font-black border-b border-primary`}
                                             >
                                                 {item.title}
                                             </Link>
                                         </li>
                                     ))}
                                 </ul>
+                                <div className="space-y-2 mt-2">
+                                    <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
+                                    <GetFreeQuote text="GET FREE QUOTE" className="md:block lg:block h-[40px] w-[220px] bg-[#0E3A6C] text-white" />
+                                </div>
                             </div>
                         </Dialog.Panel>
                     </Transition.Child>

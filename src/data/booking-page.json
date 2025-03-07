@@ -1,0 +1,23 @@
+[
+  {
+    "path": "/svg/read-our-reviews.svg",
+    "altText": "Fully Licensed & Insured Icon",
+    "heading": "Fully Licensed & Insured"
+  },
+  {
+    "path": "/svg/customer-service.svg",
+    "altText": "Customer Service Icon",
+    "heading": "Premium Customer Service"
+  },
+  {
+    "path": "/svg/secure-packing.svg",
+    "altText": "Experienced & Proffesional Icon",
+    "heading": "Experienced & Proffesional"
+  },
+  {
+    "path": "/svg/price-guarantee.svg",
+    "altText": "Transparency In Pricing Icon",
+    "heading": "Transparency In Pricing"
+  }
+]
+
