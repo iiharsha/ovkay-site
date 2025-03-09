@@ -1,7 +1,8 @@
 'use client'
 
+import ZohoBetterForm from '@/components/firstform/ZohoBetterForm';
 import ZohoFileUpload from '@/components/ZohoFileUpload';
-import ZohoFirstForm from '@/components/ZohoFirstForm';
+//import ZohoFirstForm from '@/components/ZohoFirstForm';
 
 // Define the response type to match what we expect from the ZohoFileUpload component
 interface ZohoUploadResponse {
@@ -38,7 +39,7 @@ export default function UploadPage() {
         <p>* Files will be attached to the specified entity in Zoho CRM</p>
         <p>* Maximum file size: 20MB</p>
       </div>
-      <ZohoFirstForm />
+      <ZohoBetterForm />
     </div>
   );
 }

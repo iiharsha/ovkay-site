@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "../ui/dialog"
-import ZohoFirstForm from "@/components/ZohoFirstForm"
+import ZohoBetterForm from "@/components/firstform/ZohoBetterForm"
 
 export default function GetFreeQuote({
     text = "Get Free Quote",
@@ -31,7 +31,7 @@ export default function GetFreeQuote({
                         Fill out the form below to know an estimated price.
                     </DialogDescription>
                 </DialogHeader>
-                <ZohoFirstForm />
+                <ZohoBetterForm />
             </DialogContent>
         </Dialog>
     )

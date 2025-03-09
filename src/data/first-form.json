@@ -1,0 +1,31 @@
+{
+  "bikeTypes": [
+    "61- 250CC",
+    "250+CC",
+    "EV Bike",
+    "Premium",
+    "Non Working Bike"
+  ],
+  "hearingSources": [
+    "Google Search",
+    "Instagram",
+    "Facebook",
+    "Referral",
+    "Public Boards"
+  ],
+  "locations": [
+    "Hyderabad",
+    "Bengaluru",
+    "Chennai",
+    "Mumbai",
+    "New Delhi",
+    "Kolkata",
+    "Pune",
+    "Visakhapatnam",
+    "Vijayawada",
+    "Kakinada",
+    "Rajahmundry",
+    "Guntur"
+  ]
+}
+
