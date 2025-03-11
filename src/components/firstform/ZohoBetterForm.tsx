@@ -12,30 +12,47 @@ import { createZohoLead } from "@/app/actions/createZohoLead";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema } from "@/lib/types"
-import QuoteButton from "./FirstFormQuoteButton";
+import { formSchema } from "@/lib/types";
+import QuoteButton from "./QuoteButton";
+import { toast } from "sonner";
+
+// Import shadcn components
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Infer the type from the schema
 type FormData = z.infer<typeof formSchema>;
 
-export default function ZohoFirstForm() {
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+export default function ZohoBetterForm() {
+    // Consolidated dialog and related state into a single object
+    const [dialogState, setDialogState] = useState({
+        isOpen: false,
+        showEstimate: false,
+        leadCreated: false,
+    });
+
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [notification, setNotification] = useState<{ type: 'error' | 'success', message: string } | null>(null);
     const [priceEstimate, setPriceEstimate] = useState<PriceEstimate | null>(null);
-    const [showEstimate, setShowEstimate] = useState(false);
-    const [leadCreated, setLeadCreated] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     // Setup React Hook Form with Zod resolver
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isValid },
-        getValues,
-        reset,
-        // setValue,
-        watch,
-    } = useForm<FormData>({
+    const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         mode: "onChange",
         defaultValues: {
@@ -52,60 +69,66 @@ export default function ZohoFirstForm() {
     });
 
     // Watch for location fields to validate they're not the same
-    const fromLocation = watch("From");
-    const toLocation = watch("To");
+    const fromLocation = form.watch("From");
+    const toLocation = form.watch("To");
+    const showLocationError = fromLocation && toLocation && fromLocation === toLocation;
 
-
-    const showNotification = (type: 'error' | 'success', message: string, duration = 5000) => {
-        setNotification({ type, message });
-        setTimeout(() => setNotification(null), duration);
-    };
-
-    const resetFormData = () => {
-        reset();
+    const resetForm = () => {
+        form.reset();
         setPriceEstimate(null);
-        setShowEstimate(false);
-        setLeadCreated(false);
+        setDialogState({
+            isOpen: false,
+            showEstimate: false,
+            leadCreated: false
+        });
+        setFormSubmitted(false);
     };
 
     const fetchPriceEstimate = async (): Promise<PriceEstimate | null> => {
-        const formData = getValues();
+        const { From, To, Bike_type } = form.getValues();
         try {
-            const priceData = await getPriceEstimate(formData.From, formData.To, formData.Bike_type);
+            const priceData = await getPriceEstimate(From, To, Bike_type);
 
             if (priceData.error || priceData.price === undefined) {
-                throw new Error("Error getting pricing data");
+                throw new Error(priceData.error || "Error getting pricing data");
             }
 
             return priceData;
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Failed to get price estimate";
-            showNotification('error', errorMessage);
+            toast.error(errorMessage);
             return null;
         }
     };
 
     const createLead = async (price: number): Promise<boolean> => {
-        const formData = getValues();
+        const formData = form.getValues();
         try {
             const leadData = await createZohoLead({
-                ...(formData as LeadFormData),
+                ...formData as LeadFormData,
                 Quoted_Price: price
             });
 
-            if (leadData.error) {
-                throw new Error(leadData.error);
+            if (!leadData.success) {
+                throw new Error(leadData.error || "Failed to Create Quote. Please Try Again!");
             }
 
             return true;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Failed to create lead";
-            showNotification('error', errorMessage);
+            const errorMessage = error instanceof Error ? error.message : "Failed to create Quote. Please Try Again";
+            toast.error(errorMessage);
             return false;
         }
     };
 
-    const onGetQuote = async () => {
+    // Main function to handle quote generation
+    const handleGetQuote = async () => {
+        const isValid = await form.trigger();
+        if (!isValid) {
+            toast.error("Please fill all required fields correctly");
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -116,248 +139,326 @@ export default function ZohoFirstForm() {
             }
 
             setPriceEstimate(estimateData);
-            setShowEstimate(true);
-            setIsDialogOpen(true);
 
             // Step 2: Create lead with the price
-            const leadCreated = await createLead(Number(estimateData.price));
-            if (!leadCreated) {
+            const success = await createLead(Number(estimateData.price));
+            if (!success) {
                 throw new Error("Failed to create lead");
             }
 
-            setLeadCreated(true);
+            // Step 3: Update UI state to show success
+            setDialogState({
+                isOpen: true,
+                showEstimate: true,
+                leadCreated: true
+            });
+
+            toast.success("Quote generated successfully!");
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-            showNotification('error', errorMessage);
+            toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const onSubmitForm = handleSubmit(() => {
-        if (leadCreated) {
-            showNotification('success', "Thank You for your response! Our Team will contact you right away!");
-            setTimeout(resetFormData, 3000);
+    const onSubmit = async () => {
+        if (dialogState.leadCreated) {
+            setFormSubmitted(true);
+            toast.success("Thank you for your submission!");
+            setTimeout(resetForm, 3000);
         } else {
-            showNotification('error', "Please get a quote first");
+            toast.error("Please get a quote first");
         }
-    });
+    };
 
     const handleNewQuote = () => {
-        setShowEstimate(false);
-        setLeadCreated(false);
+        setDialogState(prev => ({
+            ...prev,
+            showEstimate: false,
+            leadCreated: false
+        }));
         setPriceEstimate(null);
+    };
+
+    const handleDialogChange = (open: boolean) => {
+        // Don't allow dialog state to change if form has been submitted
+        // and is pending reset
+        if (formSubmitted) return;
+
+        setDialogState(prev => ({
+            ...prev,
+            isOpen: open
+        }));
     };
 
     return (
         <div className="mx-auto mt-10 p-6 bg-[#EFEEF1] rounded-lg font-mallory">
-            {notification && (
-                <div className={`mb-4 p-3 rounded-xl border ${notification.type === 'error'
-                    ? 'bg-red-100 text-red-700 border-red-300'
-                    : 'bg-green-100 text-green-700 border-green-300'
-                    }`}>
-                    {notification.message}
-                </div>
-            )}
-
             <div className="flex items-center justify-center m-4">
                 <Logo size="sm" />
             </div>
 
-            <form onSubmit={onSubmitForm} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Personal Information Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
-                    <div>
-                        <label className="block mb-2 font-medium">Name *</label>
-                        <input
-                            type="text"
-                            className={`w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Last_Name ? 'border-red-500' : ''
-                                }`}
-                            placeholder="Enter full name"
-                            disabled={showEstimate}
-                            {...register("Last_Name")}
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Personal Information Section */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="Last_Name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name *</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Enter full name"
+                                            {...field}
+                                            disabled={dialogState.showEstimate}
+                                            className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                        {errors.Last_Name && (
-                            <p className="text-red-500 text-xs mt-1">{errors.Last_Name.message}</p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block mb-2 font-medium">Email</label>
-                        <input
-                            type="email"
-                            className={`w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Email ? 'border-red-500' : ''
-                                }`}
-                            placeholder="Enter email"
-                            disabled={showEstimate}
-                            {...register("Email")}
-                        />
-                        {errors.Email && (
-                            <p className="text-red-500 text-xs mt-1">{errors.Email.message}</p>
-                        )}
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
-                    <div>
-                        <label className="block mb-2 font-medium">Mobile *</label>
-                        <input
-                            type="tel"
-                            className={`w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Mobile ? 'border-red-500' : ''
-                                }`}
-                            placeholder="Enter 10-digit mobile number"
-                            maxLength={10}
-                            disabled={showEstimate}
-                            {...register("Mobile")}
+                        <FormField
+                            control={form.control}
+                            name="Email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="email"
+                                            placeholder="Enter email"
+                                            {...field}
+                                            disabled={dialogState.showEstimate}
+                                            className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                        {errors.Mobile && (
-                            <p className="text-red-500 text-xs mt-1">{errors.Mobile.message}</p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block mb-2 font-medium">Expected Shipment Date</label>
-                        <input
-                            type="date"
-                            className={`w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Expected_Shipment_Date ? 'border-red-500' : ''
-                                }`}
-                            min={new Date().toISOString().split("T")[0]}
-                            disabled={showEstimate}
-                            {...register("Expected_Shipment_Date")}
-                        />
-                        {errors.Expected_Shipment_Date && (
-                            <p className="text-red-500 text-xs mt-1">{errors.Expected_Shipment_Date.message}</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* Route Information Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
-                    <div>
-                        <label className="block mb-2 font-medium">From Location *</label>
-                        <select
-                            className={`w-full p-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.From ? 'border-red-500' : ''
-                                }`}
-                            disabled={showEstimate}
-                            {...register("From")}
-                        >
-                            <option value="" disabled>Pick-Up Point</option>
-                            {formFields.locations.map((location) => (
-                                <option key={location} value={location}>
-                                    {location}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.From && (
-                            <p className="text-red-500 text-xs mt-1">{errors.From.message}</p>
-                        )}
                     </div>
 
-                    <div>
-                        <label className="block mb-2 font-medium">To Location *</label>
-                        <select
-                            className={`w-full p-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.To ? 'border-red-500' : ''
-                                }`}
-                            disabled={showEstimate}
-                            {...register("To")}
-                        >
-                            <option value="" disabled>Drop-Off Point</option>
-                            {formFields.locations.map((location) => (
-                                <option key={location} value={location}>
-                                    {location}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.To && (
-                            <p className="text-red-500 text-xs mt-1">{errors.To.message}</p>
-                        )}
-                        {fromLocation && toLocation && fromLocation === toLocation && (
-                            <p className="text-amber-600 text-xs mt-1">Pick-up and drop-off locations are the same</p>
-                        )}
-                    </div>
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="Mobile"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Mobile *</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="tel"
+                                            placeholder="Enter 10-digit mobile number"
+                                            maxLength={10}
+                                            {...field}
+                                            disabled={dialogState.showEstimate}
+                                            className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                {/* Bike Type & Lead Source */}
-                <div className="col-span-2">
-                    <label className="block mb-2 font-medium">Bike Type *</label>
-                    <select
-                        className={`w-full p-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Bike_type ? 'border-red-500' : ''
-                            }`}
-                        disabled={showEstimate}
-                        {...register("Bike_type")}
-                    >
-                        <option value="" disabled>Select Bike Type</option>
-                        {formFields.bikeTypes.map((type) => (
-                            <option key={type} value={type}>
-                                {type}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.Bike_type && (
-                        <p className="text-red-500 text-xs mt-1">{errors.Bike_type.message}</p>
+                        <FormField
+                            control={form.control}
+                            name="Expected_Shipment_Date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Expected Shipment Date</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="date"
+                                            min={new Date().toISOString().split("T")[0]}
+                                            {...field}
+                                            disabled={dialogState.showEstimate}
+                                            className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* Route Information Section */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="From"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>From Location *</FormLabel>
+                                    <Select
+                                        disabled={dialogState.showEstimate}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
+                                                <SelectValue placeholder="Pick-Up Point" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {formFields.locations.map((location) => (
+                                                <SelectItem key={location} value={location}>
+                                                    {location}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="To"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>To Location *</FormLabel>
+                                    <Select
+                                        disabled={dialogState.showEstimate}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
+                                                <SelectValue placeholder="Drop-Off Point" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {formFields.locations.map((location) => (
+                                                <SelectItem key={location} value={location}>
+                                                    {location}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                    {showLocationError && (
+                                        <p className="text-amber-600 text-xs mt-1">Pick-up and drop-off locations are the same</p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* Bike Type & Lead Source */}
+                    <div className="col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="Bike_type"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Bike Type *</FormLabel>
+                                    <Select
+                                        disabled={dialogState.showEstimate}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
+                                                <SelectValue placeholder="Select Bike Type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {formFields.bikeTypes.map((type) => (
+                                                <SelectItem key={type} value={type}>
+                                                    {type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <div className="col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="Lead_Source"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>How did you hear about us? *</FormLabel>
+                                    <Select
+                                        disabled={dialogState.showEstimate}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
+                                                <SelectValue placeholder="Select" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {formFields.hearingSources.map((source) => (
+                                                <SelectItem key={source} value={source}>
+                                                    {source}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* Hidden field for Lead_Status */}
+                    <input type="hidden" {...form.register("Lead_Status")} />
+
+                    {/* Price Estimate Display */}
+                    {dialogState.showEstimate && priceEstimate && (
+                        <Card className="col-span-2 border-2 border-[#0e3a6c]/30 mb-4 shadow-sm">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-lg font-bold text-[#0e3a6c]">Estimated Price</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex flex-col justify-between items-start">
+                                    <div className="text-2xl font-black text-[#0e3a6c]">
+                                        ₹{priceEstimate.price?.toLocaleString()}
+                                    </div>
+                                    <Button
+                                        type="button" // Explicitly set type to button to prevent form submission
+                                        variant="link"
+                                        className="text-sm text-[#0e3a6c] underline cursor-pointer mt-1 hover:text-[#0e3a6c]/70 px-0"
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent form submission
+                                            handleDialogChange(true);
+                                        }}
+                                    >
+                                        See Details
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
                     )}
-                </div>
 
-                <div className="col-span-2">
-                    <label className="block mb-2 font-medium">How did you hear about us? *</label>
-                    <select
-                        className={`w-full p-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0e3a6c]/50 ${errors.Lead_Source ? 'border-red-500' : ''
-                            }`}
-                        disabled={showEstimate}
-                        {...register("Lead_Source")}
-                    >
-                        <option value="" disabled>Select</option>
-                        {formFields.hearingSources.map((source) => (
-                            <option key={source} value={source}>
-                                {source}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.Lead_Source && (
-                        <p className="text-red-500 text-xs mt-1">{errors.Lead_Source.message}</p>
-                    )}
-                </div>
+                    <PriceEstimateDialog
+                        isOpen={dialogState.isOpen}
+                        onOpenChange={handleDialogChange}
+                        showEstimate={dialogState.showEstimate}
+                        priceEstimate={priceEstimate}
+                        formData={form.getValues() as LeadFormData}
+                    />
 
-                {/* Hidden field for Lead_Status */}
-                <input type="hidden" {...register("Lead_Status")} />
-
-                {/* Price Estimate Display */}
-                {showEstimate && priceEstimate && (
-                    <div className="col-span-2 p-4 bg-white rounded-xl border-2 border-[#0e3a6c]/30 mb-4 shadow-sm">
-                        <h3 className="text-lg font-bold text-[#0e3a6c] mb-2">Estimated Price</h3>
-                        <div className="flex flex-col justify-between items-start">
-                            <div className="text-2xl font-black text-[#0e3a6c]">
-                                ₹{priceEstimate.price?.toLocaleString()}
-                            </div>
-                            <button
-                                type="button"
-                                className="text-sm text-[#0e3a6c] underline cursor-pointer mt-1 hover:text-[#0e3a6c]/70"
-                                onClick={() => setIsDialogOpen(true)}
-                            >
-                                See Details
-                            </button>
-                        </div>
-                        {leadCreated && (
-                            <div className="mt-4 text-green-600 font-bold text-center bg-green-50 p-2 rounded-lg border border-green-100">
-
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                <PriceEstimateDialog
-                    isOpen={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                    showEstimate={showEstimate}
-                    priceEstimate={priceEstimate}
-                    formData={getValues() as LeadFormData}
-                />
-                <QuoteButton
-                    showEstimate={showEstimate}
-                    isValid={isValid}
-                    isSubmitting={isSubmitting}
-                    onGetQuote={handleSubmit(onGetQuote)}
-                    handleNewQuote={handleNewQuote}
-                />
-            </form>
+                    <QuoteButton
+                        showEstimate={dialogState.showEstimate}
+                        isValid={form.formState.isValid}
+                        isSubmitting={isSubmitting}
+                        onGetQuote={handleGetQuote}
+                        handleNewQuote={handleNewQuote}
+                    />
+                </form>
+            </Form>
             <FormTerms />
         </div>
     );

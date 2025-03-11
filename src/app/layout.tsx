@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { mallory } from "@/assets/fonts";
 import { Suspense } from "react";
 import Loading from "@/components/common/Loading";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -33,6 +34,7 @@ export default function RootLayout({
           <main>
             {children}
           </main>
+          <Toaster position="top-center" richColors />
           <Footer />
         </Suspense>
       </body>

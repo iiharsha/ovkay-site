@@ -1,6 +1,7 @@
 // PriceEstimateDialog.tsx
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { PriceBreakdown } from "./FirstFormPriceDetails"
+import { PriceBreakdown } from "./PriceDetails"
+import { Button } from "../ui/button"
 
 interface PriceEstimateDialogProps {
     isOpen: boolean
@@ -44,7 +45,7 @@ export function PriceEstimateDialog({
                 </DialogHeader>
 
                 {showEstimate && priceEstimate && (
-                    <div className="p-6 bg-white rounded-xl border-2 border-[#0e3a6c]/30">
+                    <div className="p-6 bg-white rounded-xl border-2 border-[#0e3a6c]/20">
                         {/* Price highlight section */}
                         <div className="">
                             <div className="flex items-center justify-between">
@@ -59,19 +60,19 @@ export function PriceEstimateDialog({
                         {/* Details section */}
                         <div className="space-y-3">
                             {Object.entries(formValues).map(([key, value]) => (
-                                <div key={key} className="flex items-center justify-between">
+                                <div key={key} className="flex items-center justify-between mt-2">
                                     <span className="text-secondary font-bold">{key}:</span>
                                     <span className="text-secondary">{value || "N/A"}</span>
                                 </div>
                             ))}
                         </div>
-                        <button
+                        <Button
                             type="button"
                             onClick={() => window.location.href = "/booking"}
                             className="w-full py-2 px-4 rounded-xl mt-4 text-white font-black uppercase tracking-normal bg-[#0e3a6c] hover:bg-[#052952] transition-colors"
                         >
                             Book Now
-                        </button>
+                        </Button>
 
                     </div>
                 )}

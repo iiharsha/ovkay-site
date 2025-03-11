@@ -3,6 +3,34 @@
 
 import { getAccessToken } from "@/lib/zohoAuth";
 
+// Define types for the Zoho API response structure
+interface ZohoApiSuccessResponse {
+  data: {
+    code: string;
+    details: {
+      id: string;
+      created_time: string;
+      Modified_Time?: string;
+      [key: string]: unknown;
+    }[];
+    message: string;
+    status: string;
+  }[];
+}
+
+interface ZohoApiErrorResponse {
+  code: string;
+  details?: Record<string, unknown>;
+  message: string;
+  status: string;
+}
+
+type ZohoLeadResponse = {
+  success: boolean;
+  data?: ZohoApiSuccessResponse;
+  error?: string;
+};
+
 export async function createZohoLead(formData: {
   Last_Name: string;
   Email: string;
@@ -14,12 +42,10 @@ export async function createZohoLead(formData: {
   Bike_type: string;
   Expected_Shipment_Date: string;
   Quoted_Price: number;
-  error?: Error;
-}) {
+}): Promise<ZohoLeadResponse> {
   try {
     // Get Zoho access token
     const token = await getAccessToken();
-
     // Prepare lead data
     const leadData = {
       data: [
@@ -37,7 +63,6 @@ export async function createZohoLead(formData: {
         },
       ],
     };
-
     // Send request to Zoho CRM
     const response = await fetch("https://www.zohoapis.com/crm/v3/Leads", {
       method: "POST",
@@ -48,16 +73,28 @@ export async function createZohoLead(formData: {
       body: JSON.stringify(leadData),
     });
 
-    const responseData = await response.json();
+    const responseData = (await response.json()) as
+      | ZohoApiSuccessResponse
+      | ZohoApiErrorResponse;
 
-    if (!response.ok) {
-      throw new Error(responseData.message || "Server Error");
+    if (!response.ok || "code" in responseData) {
+      return {
+        success: false,
+        error:
+          "message" in responseData
+            ? responseData.message
+            : "Unknown error occurred",
+      };
     }
 
-    return { success: true, data: responseData };
+    return {
+      success: true,
+      data: responseData as ZohoApiSuccessResponse,
+    };
   } catch (error) {
-    throw new Error(
-      `Server Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unexpected error",
+    };
   }
 }

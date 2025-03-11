@@ -98,7 +98,7 @@ export default function MobileMenu({ items }: MenuProps) {
                                 </ul>
                                 <div className="space-y-2 mt-2">
                                     <ContactUs phoneNumber="080 47103622" whatsappNumber="7396876448" />
-                                    <GetFreeQuote text="GET FREE QUOTE" className="md:block lg:block h-[40px] w-[220px] bg-[#0E3A6C] text-white" />
+                                    <GetFreeQuote text="GET FREE QUOTE" className="md:block lg:block h-[40px] w-[220px] bg-[#0E3A6C] text-black" />
                                 </div>
                             </div>
                         </Dialog.Panel>
