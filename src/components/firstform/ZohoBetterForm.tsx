@@ -35,6 +35,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 // Infer the type from the schema
 type FormData = z.infer<typeof formSchema>;
@@ -50,6 +51,7 @@ export default function ZohoBetterForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [priceEstimate, setPriceEstimate] = useState<PriceEstimate | null>(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [isWithinCity, setIsWithinCity] = useState(false);
 
     // Setup React Hook Form with Zod resolver
     const form = useForm<FormData>({
@@ -71,7 +73,7 @@ export default function ZohoBetterForm() {
     // Watch for location fields to validate they're not the same
     const fromLocation = form.watch("From");
     const toLocation = form.watch("To");
-    const showLocationError = fromLocation && toLocation && fromLocation === toLocation;
+    const showLocationError = !isWithinCity && fromLocation && toLocation && fromLocation === toLocation;
 
     const resetForm = () => {
         form.reset();
@@ -82,12 +84,16 @@ export default function ZohoBetterForm() {
             leadCreated: false
         });
         setFormSubmitted(false);
+        setIsWithinCity(false);
     };
 
     const fetchPriceEstimate = async (): Promise<PriceEstimate | null> => {
         const { From, To, Bike_type } = form.getValues();
         try {
-            const priceData = await getPriceEstimate(From, To, Bike_type);
+            const fromLocation = From;
+            const toLocation = isWithinCity ? From : To;
+
+            const priceData = await getPriceEstimate(fromLocation, toLocation, Bike_type);
 
             if (priceData.error || priceData.price === undefined) {
                 throw new Error(priceData.error || "Error getting pricing data");
@@ -106,6 +112,7 @@ export default function ZohoBetterForm() {
         try {
             const leadData = await createZohoLead({
                 ...formData as LeadFormData,
+                To: isWithinCity ? formData.From : formData.To,
                 Quoted_Price: price
             });
 
@@ -120,6 +127,27 @@ export default function ZohoBetterForm() {
             return false;
         }
     };
+
+    const handleDeliveryTypeChange = (value: string) => {
+        const withinCity = value === 'within-city';
+        setIsWithinCity(withinCity);
+
+        if (withinCity) {
+            const currentFrom = form.getValues("From");
+            if (currentFrom) {
+                form.setValue("To", currentFrom)
+            }
+        }
+    }
+
+    const handleFromChange = (value: string) => {
+        form.setValue("From", value);
+
+        if (isWithinCity) {
+            form.setValue("To", value);
+        }
+    };
+
 
     // Main function to handle quote generation
     const handleGetQuote = async () => {
@@ -191,6 +219,7 @@ export default function ZohoBetterForm() {
             isOpen: open
         }));
     };
+
 
     return (
         <div className="mx-auto mt-10 p-6 bg-[#EFEEF1] rounded-lg font-mallory">
@@ -285,6 +314,26 @@ export default function ZohoBetterForm() {
                         />
                     </div>
 
+                    {/* Delivery Type Radio Group */}
+                    <div className="col-span-2 mb-2">
+                        <div className="font-medium mb-2">Delivery Type *</div>
+                        <RadioGroup
+                            defaultValue="intercity"
+                            className="flex space-x-4"
+                            disabled={dialogState.showEstimate}
+                            onValueChange={handleDeliveryTypeChange}
+                        >
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="intercity" id="intercity" className="text-[#0e3a6c] focus:ring-[#0e3a6c]" />
+                                <label htmlFor="intercity" className="cursor-pointer">Intercity</label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="within-city" id="within-city" className="text-[#0e3a6c] focus:ring-[#0e3a6c]" />
+                                <label htmlFor="within-city" className="cursor-pointer">Within City</label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+
                     {/* Route Information Section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2">
                         <FormField
@@ -292,15 +341,15 @@ export default function ZohoBetterForm() {
                             name="From"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>From Location *</FormLabel>
+                                    <FormLabel>{isWithinCity ? "Location *" : "From Location *"}</FormLabel>
                                     <Select
                                         disabled={dialogState.showEstimate}
-                                        onValueChange={field.onChange}
+                                        onValueChange={(value) => handleFromChange(value)}
                                         value={field.value}
                                     >
                                         <FormControl>
                                             <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
-                                                <SelectValue placeholder="Pick-Up Point" />
+                                                <SelectValue placeholder={isWithinCity ? "Select Location" : "Pick-Up Point"} />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
@@ -316,37 +365,39 @@ export default function ZohoBetterForm() {
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="To"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>To Location *</FormLabel>
-                                    <Select
-                                        disabled={dialogState.showEstimate}
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
-                                                <SelectValue placeholder="Drop-Off Point" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {formFields.locations.map((location) => (
-                                                <SelectItem key={location} value={location}>
-                                                    {location}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                    {showLocationError && (
-                                        <p className="text-amber-600 text-xs mt-1">Pick-up and drop-off locations are the same</p>
-                                    )}
-                                </FormItem>
-                            )}
-                        />
+                        {!isWithinCity && (
+                            <FormField
+                                control={form.control}
+                                name="To"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>To Location *</FormLabel>
+                                        <Select
+                                            disabled={dialogState.showEstimate || isWithinCity}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="bg-white rounded-xl focus:ring-2 focus:ring-[#0e3a6c]/50">
+                                                    <SelectValue placeholder="Drop-Off Point" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {formFields.locations.filter(location => location != fromLocation).map((location) => (
+                                                    <SelectItem key={location} value={location}>
+                                                        {location}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                        {showLocationError && (
+                                            <p className="text-amber-600 text-xs mt-1">Pick-up and drop-off locations are the same</p>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                        )}
                     </div>
 
                     {/* Bike Type & Lead Source */}
